@@ -18,12 +18,12 @@ void main(){
     int nop = takedetails();
     fcfssort(nop);
     printprocess(nop);
-    int dnum = fcfscalc();
+    int dnum = fcfscalc(nop);
     printprocess(nop);
     int k;
     printf("\n");
     for(k=0;k!=dnum;k++){
-        printf("%d  %d  %d\n",d[k].n, d[k].st, d[k].ct);
+        printf("%d 		 %d  		%d\n",d[k].n, d[k].st, d[k].ct);
     }
 }
 
@@ -56,39 +56,52 @@ for(i=0;i!=num;i++){
 }
 }
 
-int fcfscalc(){
-    int secs=0,num=0,j=0;
-    int idle=0;
-    for(secs=0,j=0,num=0;j<num;){
-        if(p[j].at<=secs && p[j].status == 0){
-            if(idle=1){
-                d[num].n = 100;
-                d[num].ct = secs;
-                num++;
-                idle=0;
-            }
-            p[j].wt = secs - p[j].at;
-            p[j].ct = secs+p[j].bt;
-            p[j].tat = p[j].bt + p[j].wt;
-            d[num].ct = p[j].ct;
-            d[num].st = secs;
-            d[num].n = p[j].n;
+int fcfscalc(int nop){
 
-            secs = p[j].ct;
-            p[j].status = 1;
-            j++;
-            num++;
-        }else if(idle == 0){
-            d[num].n = 100;
-            d[num].st = secs;
-            num++;
-            idle = 1;
-        }else{
-            secs++;
-        }
+int i=0;//secs
+int j=0;//currprocess
+int num=0;//index in d
+int idle = 0;//idle
+
+for(i=0,j=0,num=0;j<nop;)              //Calculations
+  {
+    if(p[j].at<=i && p[j].status==0)
+    {
+      if(idle==1)
+      {
+        d[num].ct=i;
+        num++;
+        idle = 0;
+      }
+      d[num].n=p[j].n;
+      d[num].st = i;
+      d[num].ct = i + p[j].bt;
+      p[j].wt = d[num].st - p[j].at;
+      p[j].tat = p[j].wt + p[j].bt;
+      p[j].ct = d[num].ct;
+      i = d[num].ct;
+      p[j].status = 1;
+      j++;
+      num++;
+
     }
-    return num;
+    else if(idle == 0)
+    {
+      d[num].n=4353;
+      d[num].st = i;
+      i++;
+      idle = 1;
+    }
+    else
+    {
+      i++;
+    }
+  }
+
+
+
 }
+
 
 void printprocess(int num){
     int i;
